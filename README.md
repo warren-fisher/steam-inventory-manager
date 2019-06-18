@@ -1,9 +1,9 @@
-# python-steam-inventory-api
-Steam Inventory API written in Python for the new endpoints
+# steam-inventory-manager
+Command-line tool to list the contents of one or many steam accounts
 
 ## Main features
 - Python implementation of getting steam inventory for any game/contextid, with matching descriptions
-- Python 2 & 3 supported!!
+- Python 3 supported
 - In-built filter for tradable or non-tradable items
 - Proxy support, supports a list of socks/http/etc proxies, automatically cycles them with customisable values (how many repeats for same proxy)
 - Retries and customisable values for retry (retry delay, number of retries)
@@ -16,10 +16,9 @@ Steam Inventory API written in Python for the new endpoints
 - Timeout param added
 - count/language options added
 - Optional debug mode added
-- Now fully supports Python 2 & 3
 
 ## Mentions
-- Oat/sebmorris and Doctor McKay for their inventory api's which inspired me to write my own and base mine off, especially Seb's
+- The API used for fetching the inventory get's full credit to itsjfx/python-steam-inventory-api
 
 ## Requirements
 See requirements.txt
