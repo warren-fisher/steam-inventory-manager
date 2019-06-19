@@ -6,22 +6,6 @@ from inventory_api import InventoryAPI as InvAPI
 import collections
 import operator
 
-import yaml 
-config = yaml.safe_load(open(r"examples/config.yaml"))
-
-inv = InvAPI()
-
-inv = inv.get(**config) 
-
-# FIXME: Operation breakout cases not being detected
-items = {}
-for value, item in enumerate(inv):
-    name = inv[value]['name']
-    if name not in items:
-        items[name] = 1
-    else:
-        items[name] += 1
-
 def order_items(items):
     sorted_items = sorted(items.items(), key=operator.itemgetter(1))
     return collections.OrderedDict(sorted_items)
@@ -36,4 +20,20 @@ def print_cases(items):
             print(f"{item_name} : {count}")
 
 if __name__ == "__main__":
+    import yaml 
+    config = yaml.safe_load(open(r"examples/config.yaml"))
+
+    inv = InvAPI()
+
+    inv = inv.get(**config) 
+
+    # FIXME: Operation breakout cases not being detected
+    items = {}
+    for value, item in enumerate(inv):
+        name = inv[value]['name']
+        if name not in items:
+            items[name] = 1
+        else:
+            items[name] += 1
+
     print_cases(order_items(items))
