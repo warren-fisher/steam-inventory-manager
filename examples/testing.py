@@ -15,9 +15,12 @@ def print_all(items):
         print(f"{key} : {value}")
 
 def print_cases(items):
+    names = ['case', 'operation']
     for item_name, count in items.items():
-        if 'case' in item_name.lower():
-            print(f"{item_name} : {count}")
+        for name in names:
+            if name in item_name.lower():
+                print(f"{item_name} : {count}")
+                break
 
 if __name__ == "__main__":
     import yaml 

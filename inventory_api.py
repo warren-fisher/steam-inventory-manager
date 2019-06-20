@@ -93,18 +93,19 @@ class InventoryAPI:
 		else:
 			return self.inventory
 	
-	def get(self, steamid, appid, contextid, tradable=True, retries=5, retry_delay=1000, language='english', count=5000):	
+	def get(self, steamids, appid, contextid, tradable=True, retries=5, retry_delay=1000, language='english', count=5000):	
 		self.inventory = []
 		
-		options = {
-			"steamid": steamid,
-			"appid": appid,
-			"contextid": contextid,
-			"count": count,
-			"language": language,
-			"tradable": tradable,
-			"retries": retries,
-			"retryDelay": retry_delay/1000.0
-		}
-		
-		return self.execute(options, None)
+		for steamid in steamids:
+			options = {
+				"steamid": steamid,
+				"appid": appid,
+				"contextid": contextid,
+				"count": count,
+				"language": language,
+				"tradable": tradable,
+				"retries": retries,
+				"retryDelay": retry_delay/1000.0
+			}	
+			self.execute(options, None)
+		return self.inventory
