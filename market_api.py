@@ -1,8 +1,11 @@
-import bs4 as bs
-from requests.exceptions import HTTPError
-import requests
 import re
 from ast import literal_eval
+
+import requests
+from requests.exceptions import HTTPError
+
+import bs4 as bs
+from errors import MarketParsingError
 
 # TODO: Currently pricing info is always in USD$
 # The following link is an example of how the currency can be set to rubles,
@@ -15,7 +18,8 @@ class MarketListing:
         self.name = item_name
         self.url = f'https://steamcommunity.com/market/listings/730/{self.name}'
 
-        self.parse()
+        if not self.parse():
+            raise MarketParsingError
 
     def get_response(self):
         response = requests.get(self.url)
@@ -23,6 +27,11 @@ class MarketListing:
         return response
 
     def parse(self):
+        """
+        If the data can be parsed as expected, 
+        return the pricing_history as well as set the class attribute pricing history.
+        If the data is not as expected return False
+        """
         response = self.get_response()
         soup = bs.BeautifulSoup(response.content, 'lxml')
 
@@ -30,10 +39,15 @@ class MarketListing:
             if 'var line1' in script.text:
                 text = script.text
 
-        search = re.search('var line1(.+);', text)
-        string_representation_of_list = search.group(1)[1:]
+        try: 
+            search = re.search('var line1(.+);', text)
+            string_representation_of_list = search.group(1)[1:]
 
-        self.pricing_history = literal_eval(string_representation_of_list)
+            self.pricing_history = literal_eval(string_representation_of_list)
+            return self.pricing_history
+
+        except NameError:
+            return False
 
     def price(self):
         price_now_index = len(self.pricing_history) - 1

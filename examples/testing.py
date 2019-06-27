@@ -2,6 +2,8 @@
 from os import sys, path
 sys.path.append(path.join(path.dirname(__file__), '..'))
 from inventory_api import InventoryAPI as InvAPI
+from market_api import MarketListing
+from errors import MarketParsingError
 
 import collections
 import operator
@@ -15,11 +17,15 @@ def print_all(items):
         print(f"{key} : {value}")
 
 def print_cases(items):
-    names = ['case', 'operation']
+    names = ['case', 'operation', 'capsule']
     for item_name, count in items.items():
         for name in names:
             if name in item_name.lower():
-                print(f"{item_name} : {count}")
+                try:
+                    listing = MarketListing(name)
+                    print(f"{item_name} : {count} : {listing.price()}")
+                except MarketParsingError:
+                    print(f"Parsing ERROR {item_name} : {count} ")
                 break
 
 if __name__ == "__main__":
