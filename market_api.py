@@ -53,6 +53,8 @@ class MarketListing:
         price_now_index = len(self.pricing_history) - 1
         return self.pricing_history[price_now_index][1]
 
+#    def __
+
 if __name__ == "__main__":
     m = MarketListing('Prisma Case')
     print(m.price())

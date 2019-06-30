@@ -22,7 +22,7 @@ def print_cases(items):
         for name in names:
             if name in item_name.lower():
                 try:
-                    listing = MarketListing(name)
+                    listing = MarketListing(item_name)
                     print(f"{item_name} : {count} : {listing.price()}")
                 except MarketParsingError:
                     print(f"Parsing ERROR {item_name} : {count} ")
