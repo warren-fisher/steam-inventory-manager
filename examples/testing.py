@@ -7,6 +7,7 @@ from errors import MarketParsingError
 
 import collections
 import operator
+from time import sleep
 
 def order_items(items):
     sorted_items = sorted(items.items(), key=operator.itemgetter(1))
@@ -24,6 +25,7 @@ def print_cases(items):
                 try:
                     listing = MarketListing(item_name)
                     print(f"{item_name} : {count} : {listing.price()}")
+                    sleep(5) # Try and prevent HTTP 429 errors
                 except MarketParsingError:
                     print(f"Parsing ERROR {item_name} : {count} ")
                 break

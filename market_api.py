@@ -7,6 +7,8 @@ from requests.exceptions import HTTPError
 import bs4 as bs
 from errors import MarketParsingError
 
+from time import sleep
+
 # TODO: Currently pricing info is always in USD$
 # The following link is an example of how the currency can be set to rubles,
 # however, I am not sure if setting language to russian is neccessary
@@ -23,8 +25,14 @@ class MarketListing:
 
     def get_response(self):
         response = requests.get(self.url)
-        response.raise_for_status()
-        return response
+        try: 
+            response.raise_for_status()
+            return response
+        except HTTPError: 
+            if response.status_code == 429: # Requests are too frequent
+                sleep(60)
+                return self.get_response()
+            return response
 
     def parse(self):
         """
@@ -52,8 +60,6 @@ class MarketListing:
     def price(self):
         price_now_index = len(self.pricing_history) - 1
         return self.pricing_history[price_now_index][1]
-
-#    def __
 
 if __name__ == "__main__":
     m = MarketListing('Prisma Case')
