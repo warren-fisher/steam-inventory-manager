@@ -19,16 +19,25 @@ def print_all(items):
 
 def print_cases(items):
     names = ['case', 'operation', 'capsule']
+    print("item | quantity | unit price | total value")
     for item_name, count in items.items():
         for name in names:
             if name in item_name.lower():
                 try:
                     listing = MarketListing(item_name)
-                    print(f"{item_name} : {count} : {listing.price()}")
+                    price = listing.price()
+                    print(f"{item_name} : {count} : {price} : {truncate_decimal(price*count)}")
                     sleep(5) # Try and prevent HTTP 429 errors
                 except MarketParsingError:
                     print(f"Parsing ERROR {item_name} : {count} ")
                 break
+
+def truncate_decimal(decimal):
+    d = str(decimal)
+    d = d.split(".")
+    if len(d) == 1:
+        return d[0]
+    return int(d[0]) + 0.1 * int(d[1][0])
 
 if __name__ == "__main__":
     import yaml 
