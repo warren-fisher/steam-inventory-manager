@@ -3,7 +3,7 @@ from __future__ import print_function
 # Import logic so that the inventoryapi module can be imported from up one directory without creating a package
 from os import sys, path
 sys.path.append(path.join(path.dirname(__file__), '..'))
-from inventoryapi import InventoryAPI as InvAPI
+from inventory_api import InventoryAPI as InvAPI
 
 import logging # for debug
 
@@ -20,7 +20,7 @@ inventoryApi = InvAPI(
 logging.basicConfig(level=logging.DEBUG) # Allows us to see the debugging, here purely for the example, if a request fails it is logged as ERROR
 
 inv = InvAPI.get(
-	steamid = '76561197993496553', # eg: '76561197993496553'
+	steamids = ['76561197993496553'], # eg: '76561197993496553'
 	appid = '753', # eg: '753'
 	contextid = '6', # eg: '6'
 	tradable = True, # Filters tradable items (default: True)
@@ -35,7 +35,6 @@ inv = InvAPI.get(
 	'76561197993496553', # eg: '76561197993496553'
 	'753', # eg: '753'
 	'6', # eg: '6'
-	True, # Filters tradable items (default: True)
 )
 
 # print(inv[0]) # first tradable item in the inventory (sorted by latest)

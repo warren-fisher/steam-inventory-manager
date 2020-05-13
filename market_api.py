@@ -47,7 +47,7 @@ class MarketListing:
             if 'var line1' in script.text:
                 text = script.text
 
-        try: 
+        try:
             search = re.search('var line1(.+);', text)
             string_representation_of_list = search.group(1)[1:]
 

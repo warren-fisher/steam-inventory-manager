@@ -24,8 +24,9 @@ def print_cases(items):
         for name in names:
             if name in item_name.lower():
                 try:
-                    listing = MarketListing(item_name)
-                    price = listing.price()
+                    # listing = MarketListing(item_name)
+                    # price = listing.price()
+                    price = 0
                     print(f"{item_name} : {count} : {price} : {truncate_decimal(price*count)}")
                     sleep(5) # Try and prevent HTTP 429 errors
                 except MarketParsingError:
@@ -45,7 +46,7 @@ if __name__ == "__main__":
 
     inv = InvAPI()
 
-    inv = inv.get(**config) 
+    inv = inv.get(**config)
 
     # FIXME: Operation breakout cases not being detected
     items = {}

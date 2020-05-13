@@ -37,10 +37,10 @@ class InventoryAPI:
 	def make_request(self, options, last_assetid=""):
 		headers = {
 			"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36",
-			"referer": "https://steamcommunity.com/profiles/{}/inventory".format(options['steamid'])
+			"referer": f"https://steamcommunity.com/profiles/{options['steamid']}/inventory"
 		}
-		url = 'https://steamcommunity.com/inventory/{}/{}/{}?l={}&count={}&start_assetid={}'.format(options['steamid'], options['appid'], options['contextid'], options['language'], options['count'], last_assetid)
-		
+		url = f"https://steamcommunity.com/inventory/{options['steamid']}/{options['appid']}/{options['contextid']}?l={options['language']}&count={options['count']}&start_assetid={last_assetid}"
+
 		proxy = self.proxy()
 		proxies = {
 		  'http': proxy,
@@ -48,7 +48,7 @@ class InventoryAPI:
 		}
 		
 		self.logger.debug("Requesting. Start {}, Proxy {}, Retries {}, Items {}".format(last_assetid, proxies, options['retries'], len(self.inventory)))
-		
+
 		try:
 			req = requests.get(url=url, headers=headers, proxies=proxies, timeout=self.timeout)
 			return req.json()
@@ -72,7 +72,7 @@ class InventoryAPI:
 				
 	def execute(self, options, last_assetid=None):
 		data = self.make_request(options, last_assetid)
-		
+
 		if not 'assets' in data: # we didn't get a proper response, this may happen if Steam blocks the proxy!!
 			raise InventoryAPIException('Malformed response')
 		
@@ -93,9 +93,9 @@ class InventoryAPI:
 		else:
 			return self.inventory
 	
-	def get(self, steamids, appid, contextid, tradable=True, retries=5, retry_delay=1000, language='english', count=5000):	
+	def get(self, steamids, appid, contextid, tradable=True, retries=5, retry_delay=1000, language='english', count=5000):
 		self.inventory = []
-		
+
 		for steamid in steamids:
 			options = {
 				"steamid": steamid,
@@ -106,6 +106,6 @@ class InventoryAPI:
 				"tradable": tradable,
 				"retries": retries,
 				"retryDelay": retry_delay/1000.0
-			}	
+			}
 			self.execute(options, None)
 		return self.inventory
