@@ -24,6 +24,7 @@ def print_cases(items):
         for name in names:
             if name in item_name.lower():
                 try:
+                    # FIXME market price
                     # listing = MarketListing(item_name)
                     # price = listing.price()
                     price = 0
