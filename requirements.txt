@@ -1,2 +1,5 @@
+beautifulsoup4
+pyaml
+lxml
 requests
 requests[socks]
