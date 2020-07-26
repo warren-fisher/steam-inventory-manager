@@ -25,10 +25,10 @@ class MarketListing:
 
     def get_response(self):
         response = requests.get(self.url)
-        try: 
+        try:
             response.raise_for_status()
             return response
-        except HTTPError: 
+        except HTTPError:
             if response.status_code == 429: # Requests are too frequent
                 sleep(60)
                 return self.get_response()
@@ -36,19 +36,32 @@ class MarketListing:
 
     def parse(self):
         """
-        If the data can be parsed as expected, 
+        If the data can be parsed as expected,
         return the pricing_history as well as set the class attribute pricing history.
         If the data is not as expected return False
+
+        TODO: simplify, less for loops
         """
         response = self.get_response()
         soup = bs.BeautifulSoup(response.content, 'lxml')
 
+        real_text = ''
         for script in soup.find_all('script'):
-            if 'var line1' in script.text:
-                text = script.text
+
+            try:
+                text = script.string
+                if (text is None):
+                    continue
+
+                if 'var line1' in text:
+                    real_text = text
+
+            # Happens when the tag has no contents ???
+            except IndexError:
+                pass
 
         try:
-            search = re.search('var line1(.+);', text)
+            search = re.search('var line1(.+);', real_text)
             string_representation_of_list = search.group(1)[1:]
 
             self.pricing_history = literal_eval(string_representation_of_list)

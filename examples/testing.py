@@ -20,19 +20,22 @@ def print_all(items):
 def print_cases(items):
     names = ['case', 'operation', 'capsule']
     print("item | quantity | unit price | total value")
+    total_price = 0
     for item_name, count in items.items():
         for name in names:
             if name in item_name.lower():
                 try:
                     # FIXME market price
-                    # listing = MarketListing(item_name)
-                    # price = listing.price()
-                    price = 0
+                    listing = MarketListing(item_name)
+                    price = listing.price()
+                    total_price += price*count
                     print(f"{item_name} : {count} : {price} : {truncate_decimal(price*count)}")
                     sleep(5) # Try and prevent HTTP 429 errors
                 except MarketParsingError:
                     print(f"Parsing ERROR {item_name} : {count} ")
                 break
+
+    print(f"{total_price=}")
 
 def truncate_decimal(decimal):
     d = str(decimal)
@@ -49,7 +52,6 @@ if __name__ == "__main__":
 
     inv = inv.get(**config)
 
-    # FIXME: Operation breakout cases not being detected
     items = {}
     for value, item in enumerate(inv):
         name = inv[value]['name']
